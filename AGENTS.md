@@ -128,15 +128,14 @@ On every keystroke in the key input: lowercase, spaces → underscores, strip no
 ## Development Commands
 
 ```bash
-npm run dev         # start dev server (http://localhost:5173)
-npm run build       # type-check + production build → dist/
-npm run lint        # ESLint
-npx vitest          # run unit tests
-npx vitest --ui     # Vitest browser UI
-npm run test:e2e    # Playwright E2E (requires dev server)
+npm run dev           # start dev server (http://localhost:5173)
+npm run build         # type-check + production build → dist/
+npm run lint          # ESLint
+npm run test:unit     # run Vitest unit tests
+npm run test:unit:ui  # Vitest browser UI
+npm run test:e2e      # Playwright E2E (requires dev server)
+npm run test:e2e:ui   # Playwright UI
 ```
-
-> There is no `test` script in `package.json`; always use `npx vitest`.
 
 ---
 

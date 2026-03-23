@@ -43,8 +43,10 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 | `npm run build` | Type-check and produce a production build in `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Run ESLint across the project |
-| `npx vitest` | Run the test suite |
-| `npx vitest --ui` | Open the Vitest browser UI |
+| `npm run test:unit` | Run the Vitest unit test suite |
+| `npm run test:unit:ui` | Open the Vitest browser UI |
+| `npm run test:e2e` | Run Playwright E2E tests |
+| `npm run test:e2e:ui` | Open the Playwright UI |
 
 ## Project Structure
 
