@@ -18,11 +18,24 @@ interface FieldEditorProps {
 export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
   const [keyError, setKeyError] = useState<string | null>(null)
   const [keyInputValue, setKeyInputValue] = useState(field.key)
+  const [keyIsPristine, setKeyIsPristine] = useState(field.key === '')
   const [enumInput, setEnumInput] = useState('')
   const [enumError, setEnumError] = useState<string | null>(null)
 
+  function handleLabelChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const label = e.target.value
+    if (keyIsPristine) {
+      const slugged = slugify(label)
+      setKeyInputValue(slugged)
+      onUpdate({ label, key: slugged })
+    } else {
+      onUpdate({ label })
+    }
+  }
+
   function handleKeyChange(e: React.ChangeEvent<HTMLInputElement>) {
     const slugged = slugify(e.target.value)
+    setKeyIsPristine(false)
     setKeyInputValue(slugged)
     onUpdate({ key: slugged })
   }
@@ -67,6 +80,18 @@ export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
 
   return (
     <div className="space-y-4 p-4 border-t">
+      {/* Label */}
+      <div className="space-y-1">
+        <Label htmlFor={`label-${field.id}`}>Label</Label>
+        <Input
+          id={`label-${field.id}`}
+          value={field.label}
+          onChange={handleLabelChange}
+          maxLength={128}
+          placeholder="e.g. Employee ID"
+        />
+      </div>
+
       {/* Key */}
       <div className="space-y-1">
         <Label htmlFor={`key-${field.id}`}>Key</Label>
@@ -78,19 +103,10 @@ export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
           maxLength={64}
           placeholder="e.g. employee_id"
         />
+        {keyIsPristine && !keyError && (
+          <p className="text-xs text-muted-foreground">Auto-filled from label — edit to override</p>
+        )}
         {keyError && <p className="text-sm text-destructive">{keyError}</p>}
-      </div>
-
-      {/* Label */}
-      <div className="space-y-1">
-        <Label htmlFor={`label-${field.id}`}>Label</Label>
-        <Input
-          id={`label-${field.id}`}
-          value={field.label}
-          onChange={e => onUpdate({ label: e.target.value })}
-          maxLength={128}
-          placeholder="e.g. Employee ID"
-        />
       </div>
 
       {/* Type */}

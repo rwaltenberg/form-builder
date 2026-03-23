@@ -19,6 +19,46 @@ describe('FieldEditor', () => {
     expect(screen.getByDisplayValue('Employee ID')).toBeInTheDocument()
   })
 
+  it('label appears before key in the form', () => {
+    render(<FieldEditor field={baseField} allKeys={[]} onUpdate={vi.fn()} />)
+    const inputs = screen.getAllByRole('textbox')
+    const labelInput = screen.getByDisplayValue('Employee ID')
+    const keyInput = screen.getByDisplayValue('emp_id')
+    expect(inputs.indexOf(labelInput)).toBeLessThan(inputs.indexOf(keyInput))
+  })
+
+  it('auto-fills key from label when key is pristine', () => {
+    const onUpdate = vi.fn()
+    const pristineField = { ...baseField, key: '', label: '' }
+    render(<FieldEditor field={pristineField} allKeys={[]} onUpdate={onUpdate} />)
+    const labelInput = screen.getByPlaceholderText(/e\.g\. employee id/i)
+    fireEvent.change(labelInput, { target: { value: 'Full Name' } })
+    expect(onUpdate).toHaveBeenLastCalledWith(expect.objectContaining({ label: 'Full Name', key: 'full_name' }))
+  })
+
+  it('shows auto-fill hint when key is pristine', () => {
+    const pristineField = { ...baseField, key: '', label: '' }
+    render(<FieldEditor field={pristineField} allKeys={[]} onUpdate={vi.fn()} />)
+    expect(screen.getByText(/auto-filled from label/i)).toBeInTheDocument()
+  })
+
+  it('stops auto-filling key once the key input is manually edited', () => {
+    const onUpdate = vi.fn()
+    const pristineField = { ...baseField, key: '', label: '' }
+    render(<FieldEditor field={pristineField} allKeys={[]} onUpdate={onUpdate} />)
+    fireEvent.change(screen.getByPlaceholderText(/e\.g\. employee_id/i), { target: { value: 'my_key' } })
+    onUpdate.mockClear()
+    fireEvent.change(screen.getByPlaceholderText(/e\.g\. employee id/i), { target: { value: 'Something' } })
+    expect(onUpdate).not.toHaveBeenCalledWith(expect.objectContaining({ key: expect.any(String) }))
+  })
+
+  it('does not auto-fill key when field already has a key (not pristine)', () => {
+    const onUpdate = vi.fn()
+    render(<FieldEditor field={baseField} allKeys={[]} onUpdate={onUpdate} />)
+    fireEvent.change(screen.getByDisplayValue('Employee ID'), { target: { value: 'Employee ID Updated' } })
+    expect(onUpdate).not.toHaveBeenCalledWith(expect.objectContaining({ key: expect.any(String) }))
+  })
+
   it('calls onUpdate with slugified key on key change', async () => {
     const onUpdate = vi.fn()
     render(<FieldEditor field={baseField} allKeys={[]} onUpdate={onUpdate} />)
