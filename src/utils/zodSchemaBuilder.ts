@@ -5,6 +5,7 @@ export function buildZodSchema(fields: FormSchema): z.ZodObject<Record<string, z
   const shape: Record<string, z.ZodTypeAny> = {}
 
   for (const field of fields) {
+    if (!field.key) continue
     let fieldSchema: z.ZodTypeAny
 
     switch (field.type) {

@@ -14,6 +14,19 @@ interface PreviewFieldProps {
 export function PreviewField({ field, error }: PreviewFieldProps) {
   const { register, control } = useFormContext()
 
+  // Empty key crashes react-hook-form's ref attachment — show a disabled placeholder
+  if (!field.key) {
+    return (
+      <div className="space-y-1">
+        <Label className="text-muted-foreground">
+          {field.label || 'Untitled field'}
+          {field.required && <span className="text-destructive ml-1">*</span>}
+        </Label>
+        <Input disabled placeholder="Assign a key to this field in the builder" />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-1">
       <Label htmlFor={`preview-${field.key}`}>
