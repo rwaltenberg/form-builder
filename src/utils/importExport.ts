@@ -48,13 +48,13 @@ export function parseImportedSchema(input: unknown): ParseResult {
 
 export function formatImportError(issues: z.ZodIssue[]): string {
   const first = issues[0]
-  if (!first) return 'Unknown error'
+  if (!first) return 'Something went wrong — check your file and try again'
   const [index, field] = first.path
   if (typeof index === 'number' && field) {
     if (first.code === 'invalid_type' && 'received' in first && (first as { received: string }).received === 'undefined') {
-      return `Field ${index + 1} is missing a required '${String(field)}' value`
+      return `Field ${index + 1} is missing the '${String(field)}' property`
     }
-    return `Field ${index + 1}: '${String(field)}' ${first.message}`
+    return `Field ${index + 1} has an invalid '${String(field)}': ${first.message.toLowerCase()}`
   }
   if (typeof index === 'number') {
     return `Field ${index + 1}: ${first.message}`

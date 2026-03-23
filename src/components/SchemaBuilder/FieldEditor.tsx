@@ -29,9 +29,9 @@ export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
 
   function handleKeyBlur() {
     if (!keyInputValue) {
-      setKeyError('Key is required')
+      setKeyError('A key is required for this field')
     } else if (allKeys.includes(keyInputValue)) {
-      setKeyError('Duplicate key — must be unique')
+      setKeyError('Duplicate key — this one is already in use')
     } else {
       setKeyError(null)
     }
@@ -46,7 +46,7 @@ export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
     if (!trimmed) return
     const options = field.enumOptions ?? []
     if (options.includes(trimmed)) {
-      setEnumError('Duplicate option')
+      setEnumError('That option is already in the list')
       return
     }
     setEnumError(null)
@@ -62,7 +62,7 @@ export function FieldEditor({ field, allKeys, onUpdate }: FieldEditorProps) {
     field.validation?.min !== undefined &&
     field.validation?.max !== undefined &&
     field.validation.min > field.validation.max
-      ? 'Min must be ≤ Max'
+      ? "Min can't exceed Max"
       : null
 
   return (

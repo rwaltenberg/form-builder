@@ -52,10 +52,10 @@ export function SchemaBuilder({
           importSchema(result.data)
           toast.success(`Schema imported — ${result.data.length} fields loaded.`)
         } else {
-          toast.error(`Import failed: ${formatImportError(result.issues)}`)
+          toast.error(`Couldn't import schema — ${formatImportError(result.issues)}`)
         }
       } catch {
-        toast.error('Import failed: File is not valid JSON.')
+        toast.error("That file doesn't look like valid JSON — please check it and try again.")
       }
     }
     reader.readAsText(file)
