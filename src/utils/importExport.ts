@@ -51,7 +51,7 @@ export function formatImportError(issues: z.ZodIssue[]): string {
   if (!first) return 'Unknown error'
   const [index, field] = first.path
   if (typeof index === 'number' && field) {
-    if (first.code === 'invalid_type' && (first as z.ZodInvalidTypeIssue).received === 'undefined') {
+    if (first.code === 'invalid_type' && 'received' in first && (first as { received: string }).received === 'undefined') {
       return `Field ${index + 1} is missing a required '${String(field)}' value`
     }
     return `Field ${index + 1}: '${String(field)}' ${first.message}`

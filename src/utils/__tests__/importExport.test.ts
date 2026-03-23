@@ -74,7 +74,7 @@ describe('parseImportedSchema', () => {
     const input = [{ key: 'x', label: 'X', type: 'string', unknownField: 'value' }]
     const result = parseImportedSchema(input)
     expect(result.success).toBe(true)
-    if (result.success) expect((result.data[0] as Record<string, unknown>).unknownField).toBeUndefined()
+    if (result.success) expect((result.data[0] as unknown as Record<string, unknown>).unknownField).toBeUndefined()
   })
 })
 

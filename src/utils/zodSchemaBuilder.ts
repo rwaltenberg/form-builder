@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import type { FormSchema } from '../types'
 
-export function buildZodSchema(fields: FormSchema): z.ZodObject<z.ZodRawShape> {
-  const shape: z.ZodRawShape = {}
+export function buildZodSchema(fields: FormSchema): z.ZodObject<Record<string, z.ZodTypeAny>> {
+  const shape: Record<string, z.ZodTypeAny> = {}
 
   for (const field of fields) {
     let fieldSchema: z.ZodTypeAny
